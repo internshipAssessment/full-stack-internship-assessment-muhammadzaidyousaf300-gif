@@ -74,6 +74,31 @@ Run tests:
 cd python
 pytest -q
 
+Code Solution
+import re
+from collections import Counter
+
+def top_k_words(text: str, k: int):
+    
+    if k <= 0:
+        return []
+
+
+    words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
+
+    if not words:
+        return []
+
+    # Count frequencies
+    freq = Counter(words)
+
+    # Sort first by frequency descending, then alphabetically
+    sorted_words = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+
+    # Extract the top-k words
+    return [word for word, _ in sorted_words[:k]]
+
+
 2. Node.js (40 pts) — POST /api/sum
 
 File: node/app.js
@@ -93,6 +118,33 @@ Run tests:
 cd node
 npm install
 npm test
+
+Code Solution:
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// POST /api/sum
+app.post('/api/sum', (req, res) => {
+    const { a, b } = req.body;
+
+    // Validate input
+    if (typeof a !== 'number' || typeof b !== 'number') {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+
+    // Compute sum
+    const sum = a + b;
+    res.json({ sum });
+});
+
+// Start server (optional for testing)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
 
 3. React (30 pts) — Counter Component
 
@@ -117,6 +169,31 @@ Run tests:
 cd react
 npm install
 npm test
+
+code solution
+
+import React, { useState } from 'react';
+
+function Counter({ initial = 0 }) {
+  const [count, setCount] = useState(initial);
+
+  const increment = () => setCount(count + 1);
+  const decrement = () => {
+    if (count > 0) {
+      setCount(count - 1);
+    }
+  };
+
+  return (
+    <div>
+      <div data-testid="count">{count}</div>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement} disabled={count === 0}>–</button>
+    </div>
+  );
+}
+
+export default Counter;
 
 ✅ How to Submit
 
